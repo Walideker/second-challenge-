@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/shop.css">
+</head>
+
+<body>
+    <style>
+        div {
+            display: flex;
+
+        }
+    </style>
+    <center>
+        <h1>Hello, this is the shop page</h1>
+    </center>
+    <div id="movieList"></div>
+    <script>
+        async function fetchData() {
+            const url = 'http://www.omdbapi.com/?s=fortnite&apikey=a50aefe1';
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                displayData(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        function displayData(data) {
+            const movieListDiv = document.getElementById('movieList');
+            // Check if the data has Search property (list of movies)
+            if (data.Search) {
+                const movies = data.Search;
+                const movieListHTML = movies.map(movie => {
+                    return `
+                        <div class="movie-container">
+                            <p>${movie.Title}</p>
+                            <img src="${movie.Poster}" alt="${movie.Title} Poster"/>
+                        </div>
+                    `;
+                }).join('');
+                movieListDiv.innerHTML = movieListHTML;
+            } else {
+                movieListDiv.innerHTML = '<p>No movies found</p>';
+            }
+        }
+
+        window.onload = fetchData;
+    </script>
+</body>
+
+</html>
